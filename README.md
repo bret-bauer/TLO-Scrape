@@ -1,2 +1,2 @@
 # TLO-Scrape
-scrape of TLO site based on uploaded CSV file
+Scrapes TLO site based on uploaded CSV file

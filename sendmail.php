@@ -13,7 +13,7 @@ $mail->Host = "smtp.1and1.com"; 			//Set the hostname of the mail server
 $mail->Port = 587;				 		//Set the SMTP port number - likely to be 25, 465 or 587
 $mail->SMTPAuth = true;				 	//Whether to use SMTP authentication
 $mail->Username = "do-not-reply@allytitle.com"; 	//Username to use for SMTP authentication
-$mail->Password = "Ally$2015";				//Password to use for SMTP authentication
+$mail->Password = "s7E$6ni&xzW85";				//Password to use for SMTP authentication
 //Set who the message is to be sent from
 $mail->setFrom("do-not-reply@allytitle.com","TLO Scrape");
 //Set an alternative reply-to address

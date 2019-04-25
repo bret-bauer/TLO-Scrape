@@ -4,6 +4,7 @@
 <li><a href="home.php" class="menu">Home</a></li>
 <li><a href="upload.php" class="menu">Upload CSV</a></li>
 <li><a href="accounts.php" class="menu">Accounts</a></li>
+<li><a href="options.php" class="menu">Options</a></li>
 <li><a href="index.php?logout=1" class="menu">Log Out</a></li>
 </ul>
 </div>

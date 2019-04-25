@@ -34,6 +34,15 @@ if(strlen($ans) < 5) $ans="";
 return($ans);
 }
 
+$doit=0;
+if(date("w") > 0 AND date("w") < 6) $doit++;   // only send reminders Mon - Fri
+if(date("H") > "06" AND date("H") < "19") $doit++;  // only send between 7a-6p
+if($doit < 2) {
+	echo "Not between 7am and 6pm  on Mon-Fri - aborting.";
+	sleep(10);
+	die();
+}
+
 $debug=true;
 AddLog("Begin Scraping Transunion TLO");
 
@@ -174,7 +183,19 @@ else
 }
 
 // start loop here of SSN's to process
-$how_many=rand(6,9);
+
+$speed=explode("-",file_get_contents("speed.txt"));
+$n1=round($speed[0]/6);
+if(! $n1) $n1=1;
+$n2=round($speed[1]/6);
+if(! $n2) $n2=1;
+$how_many=rand($n1,$n2);
+if($debug) AddLog("Processing $how_many this session.");
+
+$slumber=round(420 / $how_many);   //  delay between pulls
+
+// $how_many=rand(6,9);
+
 $sql="SELECT * FROM ssn WHERE job_id=$job_id AND status=0 AND thread=$thread LIMIT $how_many";
 $check=$db->query($sql) or trigger_error("$sql - Error: ".mysqli_error($db), E_USER_ERROR);
 while($info = $check->fetch_assoc()) {
@@ -413,8 +434,11 @@ $tmp=$b_info['recs_done'];
 $tmp++;
 $sql="UPDATE jobs SET recs_done=$tmp WHERE id=$job_id";
 $db->query($sql) or trigger_error("$sql - Error: ".mysqli_error($db), E_USER_ERROR);
-$delay=rand(2,9);
-sleep($delay);
+
+// $delay=rand(2,9);
+
+if($debug) AddLog("Pausing $slumber seconds.".chr(13).chr(10));
+sleep($slumber);
 
 }  // end loop here of SSN's to process
 

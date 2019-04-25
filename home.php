@@ -1,5 +1,6 @@
 <?php
 date_default_timezone_set("America/Chicago");
+set_time_limit(600);   // 10 minutes
 session_start();
 if($_SESSION['admin'] != "yes") die("access denied");
 $stat_mess="";

@@ -46,6 +46,19 @@ if($doit < 2) {
 $debug=true;
 AddLog("Begin Scraping Transunion TLO");
 
+// get current user for this thread
+$cur_acct="";
+if($thread==1) $cur_acct=$acct_info['acct_1'];
+if($thread==2) $cur_acct=$acct_info['acct_2'];
+if($thread==3) $cur_acct=$acct_info['acct_3'];
+if($thread==4) $cur_acct=$acct_info['acct_4'];
+if($thread==5) $cur_acct=$acct_info['acct_5'];
+if($thread==6) $cur_acct=$acct_info['acct_6'];
+if($thread==7) $cur_acct=$acct_info['acct_7'];
+if($thread==8) $cur_acct=$acct_info['acct_8'];
+if($thread==9) $cur_acct=$acct_info['acct_9'];
+if($thread==10) $cur_acct=$acct_info['acct_10'];
+
 include("dbopen_new.php");
 // load accounts and passwords
 $sql="SELECT * FROM accounts WHERE id=1";
@@ -91,7 +104,7 @@ if($bs > 2) {
 	$check=$db->query($sql) or trigger_error("$sql - Error: ".mysqli_error($db), E_USER_ERROR);
 	$info = $check->fetch_assoc();
 	$db->close();
-	$html="The TU TLO scrape job JOB_&job_id thread $thread has been stopped due to too many search failures. ";
+	$html="The TU TLO scrape job JOB_&job_id thread $thread - $cur_acct has been stopped due to too many search failures. ";
 	$html.="This can be caused by CAPTCHA blocking the account.  To fix, log in manaully at website, run a search then log out.";
 	$html.="Now re-start the scrape job.";
 	if($info['last_name']) {

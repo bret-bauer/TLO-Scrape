@@ -46,6 +46,12 @@ if($doit < 2) {
 $debug=true;
 AddLog("Begin Scraping Transunion TLO");
 
+include("dbopen_new.php");
+// load accounts and passwords
+$sql="SELECT * FROM accounts WHERE id=1";
+$check=$db->query($sql) or trigger_error("$sql - Error: ".mysqli_error($db), E_USER_ERROR);
+$acct_info = $check->fetch_assoc();
+
 // get current user for this thread
 $cur_acct="";
 if($thread==1) $cur_acct=$acct_info['acct_1'];
@@ -58,12 +64,6 @@ if($thread==7) $cur_acct=$acct_info['acct_7'];
 if($thread==8) $cur_acct=$acct_info['acct_8'];
 if($thread==9) $cur_acct=$acct_info['acct_9'];
 if($thread==10) $cur_acct=$acct_info['acct_10'];
-
-include("dbopen_new.php");
-// load accounts and passwords
-$sql="SELECT * FROM accounts WHERE id=1";
-$check=$db->query($sql) or trigger_error("$sql - Error: ".mysqli_error($db), E_USER_ERROR);
-$acct_info = $check->fetch_assoc();
 
 if(isset($_GET['balance'])) {
 	echo "<br>Running thread balance of remaining debtors...<br>";
@@ -104,7 +104,7 @@ if($bs > 2) {
 	$check=$db->query($sql) or trigger_error("$sql - Error: ".mysqli_error($db), E_USER_ERROR);
 	$info = $check->fetch_assoc();
 	$db->close();
-	$html="The TU TLO scrape job JOB_&job_id thread $thread - $cur_acct has been stopped due to too many search failures. ";
+	$html="The TU TLO scrape job JOB_$job_id thread $thread - $cur_acct has been stopped due to too many search failures. ";
 	$html.="This can be caused by CAPTCHA blocking the account.  To fix, log in manaully at website, run a search then log out.";
 	$html.="Now re-start the scrape job.";
 	if($info['last_name']) {
@@ -311,17 +311,7 @@ if($good_hit) {
 		$captcha=0;
 		if(stristr($list_data,"Please fill in captcha to Continue")) {
 			$captcha=8;  // CAPTCHA block
-			$cap_mess="CAPTCHA has stopped thread $thread from working.  Please follow these steps:<br><br>(1) Log in to TU TLO as user CA.";
-			if($thread==1) $cap_mess.="ONE";
-			if($thread==2) $cap_mess.="TWO";
-			if($thread==3) $cap_mess.="THREE";
-			if($thread==4) $cap_mess.="FOUR";
-			if($thread==5) $cap_mess.="FIVE";
-			if($thread==6) $cap_mess.="SIX";
-			if($thread==7) $cap_mess.="SEVEN";
-			if($thread==8) $cap_mess.="EIGHT";
-			if($thread==9) $cap_mess.="NINE";
-			if($thread==10) $cap_mess.="TEN";
+			$cap_mess="CAPTCHA has stopped thread $thread - $cur_acct from working.  Please follow these steps:<br><br>(1) Log in to TU TLO as user $cur_acct";
 			$cap_mess.=" and perform a search on the debtor below.<br>";
 			$cap_mess.="Be sure to complete the CAPTCHA challenge and finish the search.  When you see search results you may log out.";
 			$cap_mess.="<br><br>(2) Click the red ball icon on the TLO scrape page to reset the paused thread.<br><br>".$type_html;
